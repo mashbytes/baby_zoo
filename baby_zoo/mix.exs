@@ -29,8 +29,8 @@ defmodule BabyZoo.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {BabyZoo.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      mod: {BabyZoo, []},
+      extra_applications: [:elixir_ale, :logger, :runtime_tools]
     ]
   end
 
@@ -38,6 +38,7 @@ defmodule BabyZoo.MixProject do
   defp deps do
     [
       {:nerves, "~> 1.0", runtime: false},
+      {:elixir_ale, "~> 1.0"},
       {:shoehorn, "~> 0.2"}
     ] ++ deps(@target)
   end
