@@ -39,22 +39,17 @@ defmodule BabyZoo.Sensors.Bat do
     listen_loop()
   end
 
-  defp process_noise_signal(:rising) do
-    Logger.debug("Received rising noise event")
-    GenServer.cast(__MODULE__, :increment)
+  defp process_noise_signal(state) do
+    Logger.debug("Received #{state} noise event")
+    GenServer.cast(__MODULE__, state)
   end
 
-  defp process_noise_signal(:falling) do
-    Logger.debug("Received falling noise event")
-    GenServer.cast(__MODULE__, :increment)
-  end
-
-  def handle_cast(:increment, state) do
+  def handle_cast(:rising, state) do
     Keeper.ok()
     {:noreply, Map.put(state, :value, 0)}
   end
 
-  def handle_cast({:decrement}, state) do
+  def handle_cast(:falling, state) do
     old_value = state[:value]
     case old_value do
       x when x < 0 ->
