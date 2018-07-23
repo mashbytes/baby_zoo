@@ -41,7 +41,13 @@ defmodule BabyZoo.Sensors.Bat.Server do
     GenServer.cast(__MODULE__, state)
   end
 
-  def handle_cast(direction, state) do
+  def handle_cast(:rising, state) do
+    new_state = Impl.determine_state(state, direction)
+    @keeper.sensor_state_changed({:type, sound, :state, new_state)
+    { :noreply, new_state }
+  end
+
+  def handle_cast(:falling, state) do
     new_state = Impl.determine_state(state, direction)
     @keeper.sensor_state_changed({:type, sound, :state, new_state)
     { :noreply, new_state }
