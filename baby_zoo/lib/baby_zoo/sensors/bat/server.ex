@@ -9,7 +9,8 @@ defmodule BabyZoo.Sensors.Bat.Server do
   alias BabyZoo.Sensors.Bat.Impl
   alias BabyZoo.Sensors.Bat.Hardware
 
-  @keeper Application.get_env(:zoo, :keeper)
+  @keeper Application.get_env(:zoo, :keeper, BabyZoo.Keeper)
+  @hardware Application.get_env(:zoo, :bat_hardware, BabyZoo.Sensors.Bat.Hardware)
 
   def start_link do
     GenServer.start_link(__MODULE__, :unknown)
@@ -18,7 +19,7 @@ defmodule BabyZoo.Sensors.Bat.Server do
   def init(state) do
     Logger.info("Starting Server")
     pid = spawn_link(fn -> listen_for_hardware_updates() end)
-    { :ok, _ } = Hardware.start_link(pid)
+    { :ok, _ } = @hardware.start_link(pid)
     { :ok, state }
   end
 
