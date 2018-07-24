@@ -6,54 +6,41 @@ defmodule BabyZoo.Sensors.Bat.Server do
 
   use GenServer
 
-  alias ElixirALE.GPIO
   alias BabyZoo.Sensors.Bat.Impl
+  alias BabyZoo.Sensors.Bat.Hardware
 
   @keeper Application.get_env(:zoo, :keeper)
-  @input_pin Application.get_env(:zoo, :input_pin, 20)
 
   def start_link do
     GenServer.start_link(__MODULE__, :unknown)
   end
 
   def init(state) do
-    Logger.info("Starting pin #{@input_pin} as input")
-    {:ok, input_pid} = GPIO.start_link(@input_pin, :input)
-    spawn(fn -> listen_forever(input_pid) end)
-    {:ok, state}
+    Logger.info("Starting Server")
+    pid = spawn_link(fn -> listen_for_hardware_updates() end)
+    { :ok, _ } = Hardware.start_link(pid)
+    { :ok, state }
   end
 
-  defp listen_forever(input_pid) do
-    # Start listening for interrupts on rising and falling edges
-    GPIO.set_int(input_pid, :both)
-    listen_loop()
-  end
-
-  defp listen_loop() do
-    # Infinite loop receiving interrupts from gpio
+  defp listen_for_hardware_updates do
     receive do
-      {:gpio_interrupt, p, state} ->
-        Logger.debug("Received #{state} event on pin #{p}")
-        process_noise_signal(state)
+      { :hardware_state_update, state } ->
+        Logger.debug("Received #{state} event from hardware")
+        GenServer.cast(__MODULE__, state)
     end
 
-    listen_loop()
-  end
-
-  defp process_noise_signal(state) do
-    Logger.debug("Received #{state} noise event")
-    GenServer.cast(__MODULE__, state)
+    listen_for_hardware_updates()
   end
 
   def handle_cast(:rising, state) do
     new_state = Impl.determine_state(state, direction)
-    @keeper.sensor_state_changed({:type, sound, :state, new_state)
+    @keeper.sensor_state_changed({:type, :sound, :state, new_state)
     { :noreply, new_state }
   end
 
   def handle_cast(:falling, state) do
     new_state = Impl.determine_state(state, direction)
-    @keeper.sensor_state_changed({:type, sound, :state, new_state)
+    @keeper.sensor_state_changed({:type, :sound, :state, new_state)
     { :noreply, new_state }
   end
 
