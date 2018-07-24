@@ -12,6 +12,10 @@ defmodule BabyZoo.Sensors.Bat.Server do
   @keeper Application.get_env(:zoo, :keeper)
   @input_pin Application.get_env(:zoo, :input_pin, 20)
 
+  def start_link do
+    GenServer.start_link(__MODULE__, :unknown)
+  end
+
   def init(state) do
     Logger.info("Starting pin #{@input_pin} as input")
     {:ok, input_pid} = GPIO.start_link(@input_pin, :input)

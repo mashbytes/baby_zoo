@@ -6,8 +6,10 @@ defmodule BabyZoo.Sensors.Bat do
 
   use GenServer
 
+  alias BabyZoo.Sensors.Bat.Server
+
   def new() do
-    { :ok, pid } = GenServer.start_link(BabyZoo.Sensors.Bat.Server, :unknown)
+    { :ok, pid } = Server.start_link()
     pid
   end
 
