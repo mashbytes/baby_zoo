@@ -6,6 +6,8 @@ defmodule BabyZoo.Keeper do
 
   require Logger
 
+  alias BabyZoo.SensorTick
+
   def start do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
@@ -14,33 +16,21 @@ defmodule BabyZoo.Keeper do
     {:ok, state}
   end
 
-  def sensor_state_changed(state) do
-    GenServer.cast(__MODULE__, state)
+  def process_sensor_tick(tick) do
+    GenServer.cast(__MODULE__, tick)
   end
 
-  def ok(state) do
-    GenServer.cast(__MODULE__, {:ok, state})
+  def handle_cast(%SensorTick{ state: :ok} = tick, _) do
+    Logger.debug("#{:tick} is #{tick}")
+    {:noreply, []}
   end
 
-  def warning(state) do
-    GenServer.cast(__MODULE__, {:warning, state})
-  end
-
-  def critical(state) do
-    GenServer.cast(__MODULE__, {:critical, state})
-  end
-
-  def handle_cast({ :ok }, _) do
+  def handle_cast(%SensorTick{ state: :warning} = tick, _) do
     Logger.debug("#{:state} is #{state}")
     {:noreply, []}
   end
 
-  def handle_cast({ :warning }, _) do
-    Logger.debug("#{:state} is #{state}")
-    {:noreply, []}
-  end
-
-  def handle_cast({ :critical }, _) do
+  def handle_cast(%SensorTick{ state: :critical} = tick, _) do
     Logger.debug("#{:state} is #{state}")
     {:noreply, []}
   end

@@ -4,7 +4,7 @@ defmodule BabyZoo.Sensors.Bat.Hardware do
 
   alias ElixirALE.GPIO
 
-  @input_pin Application.get_env(:bat, :input_pin, 20)
+  @input_pin Application.get_env(:zoo, :bat_hardware_input_pin, 20)
 
   def start_link(receiver_pid) do
     Logger.info("Starting hardware on pin #{@input_pin}, receiver pid #{receiver_pid}")
@@ -25,10 +25,10 @@ defmodule BabyZoo.Sensors.Bat.Hardware do
     receive do
       {:gpio_interrupt, p, state} ->
         Logger.debug("Received #{state} event on pin #{p}")
-        send receiver_pid, { :hardware_state, state }
+        send receiver_pid, { :hardware_tick, state }
     end
 
-    listen_loop()
+    listen_loop(receiver_pid)
   end
 
 
