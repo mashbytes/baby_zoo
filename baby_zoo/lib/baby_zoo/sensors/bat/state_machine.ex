@@ -1,6 +1,6 @@
 defmodule BabyZoo.Sensors.Bat.StateMachine do
 
-  def next_state(old_state, :rising) do
+  def next_state(_, :rising) do
     :ok
   end
 

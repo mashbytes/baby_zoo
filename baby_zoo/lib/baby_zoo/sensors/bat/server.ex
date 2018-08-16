@@ -17,6 +17,7 @@ defmodule BabyZoo.Sensors.Bat.Server do
     GenServer.start_link(__MODULE__, :unknown)
   end
 
+  @impl true
   def init(state) do
     Logger.info("Starting Server")
     pid = spawn_link(fn -> listen_for_hardware() end)
@@ -34,21 +35,23 @@ defmodule BabyZoo.Sensors.Bat.Server do
     listen_for_hardware()
   end
 
+  @impl true
   def handle_cast(:rising, state) do
     new_state = StateMachine.next_state(state, :rising)
-    tick = to_tick(new_state, direction)
+    tick = to_tick(new_state)
     @keeper.process_sensor_tick(tick)
     { :noreply, new_state }
   end
 
+  @impl true
   def handle_cast(:falling, state) do
     new_state = StateMachine.next_state(state, :falling)
-    tick = to_tick(new_state, direction)
+    tick = to_tick(new_state)
     @keeper.process_sensor_tick(tick)
     { :noreply, new_state }
   end
 
-  defp to_tick(new_state, hardware_status) do
+  defp to_tick(new_state) do
     SensorTick.new(:sound, new_state, DateTime.utc_now())
   end
 

@@ -18,14 +18,14 @@ defmodule BabyZoo.Application do
   def children("host") do
     [
       # Starts a worker by calling: BabyZoo.Worker.start_link(arg)
-      {BabyZoo.Sensors.Bat},
+      {BabyZoo.Sensors.Bat.Server},
     ]
   end
 
   def children(_target) do
     [
       # Starts a worker by calling: BabyZoo.Worker.start_link(arg)
-      {BabyZoo.Sensors.Bat},
+      {BabyZoo.Sensors.Bat.Server},
     ]
   end
 end

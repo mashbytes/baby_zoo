@@ -26,12 +26,12 @@ defmodule BabyZoo.Keeper do
   end
 
   def handle_cast(%SensorTick{ state: :warning} = tick, _) do
-    Logger.debug("#{:state} is #{state}")
+    Logger.debug("#{:state} is #{tick}")
     {:noreply, []}
   end
 
   def handle_cast(%SensorTick{ state: :critical} = tick, _) do
-    Logger.debug("#{:state} is #{state}")
+    Logger.debug("#{:state} is #{tick}")
     {:noreply, []}
   end
 
