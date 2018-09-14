@@ -1,4 +1,4 @@
-defmodule BabyZoo.Application do
+defmodule BabyZoo do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -18,14 +18,14 @@ defmodule BabyZoo.Application do
   def children("host") do
     [
       # Starts a worker by calling: BabyZoo.Worker.start_link(arg)
-      {BabyZoo.Sensors.Bat.Server},
+      {BabyZoo.Sensors.Bat.Server, :unknown},
     ]
   end
 
   def children(_target) do
     [
       # Starts a worker by calling: BabyZoo.Worker.start_link(arg)
-      {BabyZoo.Sensors.Bat.Server},
+      {BabyZoo.Sensors.Bat.Server, :unknown},
     ]
   end
 end

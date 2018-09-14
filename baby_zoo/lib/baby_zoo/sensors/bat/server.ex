@@ -11,11 +11,11 @@ defmodule BabyZoo.Sensors.Bat.Server do
 
   @keeper Application.get_env(:zoo, :keeper, BabyZoo.Keeper)
   @hardware Application.get_env(:zoo, :bat_hardware, BabyZoo.Sensors.Bat.Hardware)
-  @impl Application.get_env(:zoo, :bat_impl, BabyZoo.Sensors.Bat.StateMachine)
+  # @state_machine Application.get_env(:zoo, :bat_impl, BabyZoo.Sensors.Bat.StateMachine)
 
-  def start_link do
-    GenServer.start_link(__MODULE__, :unknown)
-  end
+  # def start_link do
+  #   GenServer.start_link(__MODULE__, :unknown)
+  # end
 
   @impl true
   def init(state) do
