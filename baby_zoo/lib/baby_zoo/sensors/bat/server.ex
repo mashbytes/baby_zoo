@@ -13,9 +13,9 @@ defmodule BabyZoo.Sensors.Bat.Server do
   @hardware Application.get_env(:zoo, :bat_hardware, BabyZoo.Sensors.Bat.Hardware)
   # @state_machine Application.get_env(:zoo, :bat_impl, BabyZoo.Sensors.Bat.StateMachine)
 
-  # def start_link do
-  #   GenServer.start_link(__MODULE__, :unknown)
-  # end
+  def start_link(initial_state) do
+    GenServer.start_link(__MODULE__, initial_state)
+  end
 
   @impl true
   def init(state) do
