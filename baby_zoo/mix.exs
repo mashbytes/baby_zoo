@@ -7,13 +7,14 @@ defmodule BabyZoo.MixProject do
     [
       app: :baby_zoo,
       version: "0.1.0",
-      elixir: "~> 1.4",
+      elixir: "~> 1.6",
       target: @target,
       archives: [nerves_bootstrap: "~> 1.0"],
       deps_path: "deps/#{@target}",
       build_path: "_build/#{@target}",
       lockfile: "mix.lock.#{@target}",
       start_permanent: Mix.env() == :prod,
+      build_embedded: @target != "host",
       aliases: [loadconfig: [&bootstrap/1]],
       deps: deps()
     ]
@@ -29,17 +30,17 @@ defmodule BabyZoo.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {BabyZoo, []},
-      extra_applications: [:elixir_ale, :logger, :runtime_tools]
+      mod: {BabyZoo.Application, []},
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:nerves, "~> 1.0", runtime: false},
-      {:elixir_ale, "~> 1.0"},
-      {:shoehorn, "~> 0.2"}
+      {:nerves, "~> 1.3", runtime: false},
+      {:shoehorn, "~> 0.4"},
+      {:ring_logger, "~> 0.4"}
     ] ++ deps(@target)
   end
 
@@ -48,7 +49,8 @@ defmodule BabyZoo.MixProject do
 
   defp deps(target) do
     [
-      {:nerves_runtime, "~> 0.4"}
+      {:nerves_runtime, "~> 0.6"},
+      {:nerves_init_gadget, "~> 0.4"}
     ] ++ system(target)
   end
 
@@ -58,7 +60,6 @@ defmodule BabyZoo.MixProject do
   defp system("rpi3"), do: [{:nerves_system_rpi3, "~> 1.0", runtime: false}]
   defp system("bbb"), do: [{:nerves_system_bbb, "~> 1.0", runtime: false}]
   defp system("ev3"), do: [{:nerves_system_ev3, "~> 1.0", runtime: false}]
-  defp system("qemu_arm"), do: [{:nerves_system_qemu_arm, "~> 1.0", runtime: false}]
   defp system("x86_64"), do: [{:nerves_system_x86_64, "~> 1.0", runtime: false}]
   defp system(target), do: Mix.raise("Unknown MIX_TARGET: #{target}")
 end
