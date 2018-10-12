@@ -40,7 +40,8 @@ defmodule BabyZoo.MixProject do
     [
       {:nerves, "~> 1.3", runtime: false},
       {:shoehorn, "~> 0.4"},
-      {:ring_logger, "~> 0.4"}
+      {:ring_logger, "~> 0.4"},
+      {:elixir_ale, "~> 1.0"},
     ] ++ deps(@target)
   end
 

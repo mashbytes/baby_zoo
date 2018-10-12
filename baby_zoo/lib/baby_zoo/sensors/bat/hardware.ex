@@ -1,35 +1,49 @@
 defmodule BabyZoo.Sensors.Bat.Hardware do
 
+  @behaviour BabyZoo.Sensor
+
   require Logger
 
+  use GenServer
+
   alias ElixirALE.GPIO
+  alias BabyZoo.Sensors.Bat.StateMachine
 
   @input_pin Application.get_env(:zoo, :bat_hardware_input_pin, 4)
 
-  def start_link(receiver_pid) do
-    Logger.info("Starting hardware on pin #{@input_pin}, receiver pid #{inspect receiver_pid}")
-    {:ok, input_pid} = GPIO.start_link(@input_pin, :input)
-    # TODO spawn link?
-    spawn(fn -> listen_forever(input_pid, receiver_pid) end)
-    { :ok, self() }
+  def start_link() do
+    GenServer.start_link(__MODULE__, BabyZoo.SensorState.new(:sound, :unknown, DateTime.utc_now()))
   end
 
-  defp listen_forever(input_pid, receiver_pid) do
-    # Start listening for interrupts on rising and falling edges
-    GPIO.set_int(input_pid, :both)
-    listen_loop(receiver_pid)
+  def init(state) do
+    Logger.info("Starting hardware on pin #{@input_pin}")
+    {:ok, pid} = GPIO.start_link(@input_pin, :input)
+    GPIO.set_int(pid, :both)
+    {:ok, state}
   end
 
-  defp listen_loop(receiver_pid) do
-    # Infinite loop receiving interrupts from gpio
-    receive do
-      {:gpio_interrupt, p, state} ->
-        Logger.debug("Received #{state} event on pin #{p}")
-        send receiver_pid, { :hardware_tick, state }
-    end
-
-    listen_loop(receiver_pid)
+  def handle_info({:gpio_interrupt, @input_pin, direction}, state) do
+    Logger.info("Received interrupt direction #{direction}")
+    new_level = StateMachine.next_level(state.level, direction)
+    new_since = calculate_since(state.level, new_level, state.since)
+    new_state = %{state | level: new_level, since: new_since}
+    {:noreply, new_state}
   end
 
+  def handle_call(:get_current_state, state) do
+    { :reply, state, state }
+  end
+
+  defp calculate_since(level, level, since) do
+    since
+  end
+
+  defp calculate_since(_, _, _) do
+    DateTime.utc_now()
+  end
+
+  def get_current_state() do
+    GenServer.call(__MODULE__, :get_current_state)
+  end
 
 end
