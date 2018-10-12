@@ -16,21 +16,21 @@ defmodule BabyZoo.Sensors.Bat.Hardware do
   end
 
   def init(state) do
-    Logger.info("Starting hardware on pin #{@input_pin}")
+    Logger.debug("Starting hardware on pin #{@input_pin}")
     {:ok, pid} = GPIO.start_link(@input_pin, :input)
     GPIO.set_int(pid, :both)
     {:ok, state}
   end
 
   def handle_info({:gpio_interrupt, @input_pin, direction}, state) do
-    Logger.info("Received interrupt direction #{direction}")
     new_level = StateMachine.next_level(state.level, direction)
+    Logger.debug("Received interrupt direction #{direction}, prev level #{state.level} new level #{new_level}")
     new_since = calculate_since(state.level, new_level, state.since)
     new_state = %{state | level: new_level, since: new_since}
     {:noreply, new_state}
   end
 
-  def handle_call(:get_current_state, state) do
+  def handle_call(:get_current_state, _from, state) do
     { :reply, state, state }
   end
 

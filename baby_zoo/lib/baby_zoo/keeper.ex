@@ -17,23 +17,23 @@ defmodule BabyZoo.Keeper do
         {:ok, pid} = s.start_link()
         pid
       end)
-    Process.send_after(self(), :tick, 1_000)
+    Process.send_after(self(), :tick, 5_000)
     {:ok, %{sensors: sensor_pids, states: %{}}}
   end
 
   def handle_info(:tick, state) do
-    Logger.debug("About to query sensors #{state.sensors}")
+    Logger.debug("About to query sensors #{inspect state.sensors}")
     new_states =
       state.sensors
       |> Enum.map(fn pid -> {pid, GenServer.call(pid, :get_current_state)} end)
       |> Map.new
 
     new_state = %{state | states: new_states}
-      Logger.debug("Previous state #{state}, new_state #{new_state}")
+      Logger.debug("Previous state #{inspect state}, new_state #{inspect new_state}")
 
-    Process.send_after(self(), :tick, 1_000)
+    Process.send_after(self(), :tick, 5_000)
 
-    {:noreply, }
+    {:noreply, new_state}
   end
 
 end
