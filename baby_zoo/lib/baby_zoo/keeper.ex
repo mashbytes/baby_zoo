@@ -25,7 +25,7 @@ defmodule BabyZoo.Keeper do
     Logger.debug("About to query sensors #{state.sensors}")
     new_states =
       state.sensors
-      |> Enum.map(fn pid -> {pid, BabyZoo.Sensor.get_current_state()} end)
+      |> Enum.map(fn pid -> {pid, GenServer.call(pid, :get_current_state)} end)
       |> Map.new
 
     new_state = %{state | states: new_states}
