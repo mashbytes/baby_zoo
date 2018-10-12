@@ -1,11 +1,11 @@
 defmodule BabyZoo.Sensors.Bat.StateMachine do
 
-  def next_state(_, :rising) do
+  def next_level(_, :rising) do
     :ok
   end
 
-  def next_state(old_state, :falling) do
-    case old_state do
+  def next_level(old_level, :falling) do
+    case old_level do
       :warning  -> :critical
       :critical -> :critical
       _         -> :warning

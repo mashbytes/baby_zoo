@@ -6,34 +6,34 @@ defmodule BabyZoo.Keeper do
 
   require Logger
 
-  alias BabyZoo.SensorTick
-
-  def start do
-    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  def start_link(sensors) do
+    GenServer.start_link(__MODULE__, sensors, name: __MODULE__)
   end
 
-  def init(state) do
-    {:ok, state}
+  def init(sensors) do
+    sensor_pids =
+      sensors
+      |> Enum.map(fn s ->
+        {:ok, pid} = s.start_link()
+        pid
+      end)
+    Process.send_after(self(), :tick, 5_000)
+    {:ok, %{sensors: sensor_pids, states: %{}}}
   end
 
-  def process_sensor_tick(tick) do
-    GenServer.cast(__MODULE__, tick)
-  end
+  def handle_info(:tick, state) do
+    Logger.debug("About to query sensors #{inspect state.sensors}")
+    new_states =
+      state.sensors
+      |> Enum.map(fn pid -> {pid, GenServer.call(pid, :get_current_state)} end)
+      |> Map.new
 
-  def handle_cast(%SensorTick{ state: :ok} = tick, _) do
-    Logger.debug("#{:tick} is #{tick}")
-    {:noreply, []}
-  end
+    new_state = %{state | states: new_states}
+      Logger.debug("Previous state #{inspect state}, new_state #{inspect new_state}")
 
-  def handle_cast(%SensorTick{ state: :warning} = tick, _) do
-    Logger.debug("#{:state} is #{tick}")
-    {:noreply, []}
-  end
+    Process.send_after(self(), :tick, 5_000)
 
-  def handle_cast(%SensorTick{ state: :critical} = tick, _) do
-    Logger.debug("#{:state} is #{tick}")
-    {:noreply, []}
+    {:noreply, new_state}
   end
-
 
 end
