@@ -6,14 +6,19 @@ defmodule BabyZoo.Keeper do
 
   require Logger
 
-  def start do
-    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  def start_link(sensors) do
+    GenServer.start_link(__MODULE__, sensors, name: __MODULE__)
   end
 
-  def init(_) do
-    {:ok, bat_pid} = BabyZoo.Sensors.Bat.Hardware.start_link()
+  def init(sensors) do
+    sensor_pids =
+      sensors
+      |> Enum.map(fn s ->
+        {:ok, pid} = s.start_link()
+        pid
+      end)
     Process.send_after(self(), :tick, 1_000)
-    {:ok, %{sensors: [bat_pid], states: %{}}}
+    {:ok, %{sensors: sensor_pids, states: %{}}}
   end
 
   def handle_info(:tick, state) do
