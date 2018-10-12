@@ -6,7 +6,7 @@ defmodule BabyZoo.Sensors.Bat.Hardware do
 
   use GenServer
 
-  alias ElixirALE.GPIO
+  alias GpioRpi
   alias BabyZoo.Sensors.Bat.StateMachine
 
   @input_pin Application.get_env(:zoo, :bat_hardware_input_pin, 4)
@@ -17,8 +17,9 @@ defmodule BabyZoo.Sensors.Bat.Hardware do
 
   def init(state) do
     Logger.debug("Starting hardware on pin #{@input_pin}")
-    {:ok, pid} = GPIO.start_link(@input_pin, :input)
-    GPIO.set_int(pid, :both)
+    {:ok, pid} = GpioRpi.start_link(@input_pin, :input)
+    GpioRpi.set_mode(pid, :down)
+    GpioRpi.set_int(pid, :both)
     {:ok, state}
   end
 
