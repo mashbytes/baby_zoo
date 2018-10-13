@@ -24,23 +24,13 @@ defmodule BabyZoo.Sensors.Bat.Hardware do
   end
 
   def handle_info({:gpio_interrupt, @input_pin, direction}, state) do
-    new_level = StateMachine.next_level(state.level, direction)
-    Logger.debug("Received interrupt direction #{direction}, prev level #{state.level} new level #{new_level}")
-    new_since = calculate_since(state.level, new_level, state.since)
-    new_state = %{state | level: new_level, since: new_since}
+    new_state = StateMachine.next_state(state, direction)
+    Logger.debug("Received interrupt direction #{direction}, prev state #{inspect state} new state #{inspect new_state}")
     {:noreply, new_state}
   end
 
   def handle_call(:get_current_state, _from, state) do
-    { :reply, state, state }
-  end
-
-  defp calculate_since(level, level, since) do
-    since
-  end
-
-  defp calculate_since(_, _, _) do
-    DateTime.utc_now()
+    {:reply, state, state}
   end
 
   def get_current_state() do
