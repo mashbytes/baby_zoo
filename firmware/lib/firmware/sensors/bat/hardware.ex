@@ -8,10 +8,6 @@ defmodule BabyZoo.Sensors.Bat.Hardware do
 
   @input_pin Application.get_env(:zoo, :bat_hardware_input_pin, 4)
 
-  # def start_link() do
-  #   GenServer.start_link(__MODULE__, BabyZoo.SensorState.new(:sound, :unknown, DateTime.utc_now()))
-  # end
-  #
   def init(state) do
     Logger.debug("Starting hardware on pin #{@input_pin}")
     {:ok, pid} = GpioRpi.start_link(@input_pin, :input)
