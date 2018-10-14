@@ -1,11 +1,11 @@
-defmodule BabyZoo.MixProject do
+defmodule Firmware.MixProject do
   use Mix.Project
 
   @target System.get_env("MIX_TARGET") || "host"
 
   def project do
     [
-      app: :baby_zoo,
+      app: :firmware,
       version: "0.1.0",
       elixir: "~> 1.6",
       target: @target,
@@ -30,7 +30,7 @@ defmodule BabyZoo.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {BabyZoo, []},
+      mod: {Firmware.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -40,8 +40,7 @@ defmodule BabyZoo.MixProject do
     [
       {:nerves, "~> 1.3", runtime: false},
       {:shoehorn, "~> 0.4"},
-      {:ring_logger, "~> 0.4"},
-      {:gpio_rpi, "~> 0.2.2"},
+      {:ring_logger, "~> 0.4"}
     ] ++ deps(@target)
   end
 
@@ -51,7 +50,9 @@ defmodule BabyZoo.MixProject do
   defp deps(target) do
     [
       {:nerves_runtime, "~> 0.6"},
-      {:nerves_init_gadget, "~> 0.4"}
+      {:nerves_init_gadget, "~> 0.4"},
+      {:gpio_rpi, "~> 0.2.2"},
+      {:historian, path: "../historian"},
     ] ++ system(target)
   end
 

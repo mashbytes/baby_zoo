@@ -4,8 +4,8 @@
 ##  The cookie needs to be configured prior to vm boot for
 ##  for read only filesystem.
 
-# -name baby_zoo@0.0.0.0
--setcookie W4U9dcLB3+pNolWkMtZYbjkbdq1Ei0D2Ns7kiEihEw1Plags2+7kCZIzymdWqIU6
+# -name firmware@0.0.0.0
+-setcookie e5n4hsyqwhmjkzadlyujaepuopc4unc4odndnayo2xr4yy53lytuqhuugupempbl
 
 ## Use Ctrl-C to interrupt the current shell rather than invoking the emulator's
 ## break handler and possibly exiting the VM.
