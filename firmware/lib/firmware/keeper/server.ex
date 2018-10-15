@@ -8,6 +8,8 @@ defmodule BabyZoo.Keeper.Server do
 
   @tick_interval 5_000
 
+  alias BabyZoo.Keeper.Impl
+
   def init(sensors) do
     schedule_tick()
     {:ok, %{sensors: sensors, states: %{}}}
@@ -15,13 +17,10 @@ defmodule BabyZoo.Keeper.Server do
 
   def handle_info(:tick, state) do
     Logger.debug("About to query sensors #{inspect state.sensors}")
-    new_states =
-      state.sensors
-      |> Enum.map(fn sensor -> {sensor, sensor.get_current_state()} end)
-      |> Map.new
 
-    new_state = %{state | states: new_states}
-      Logger.debug("Previous state #{inspect state}, new_state #{inspect new_state}")
+    new_state = Impl.fetch_sensor_states(state.sensors, state)
+
+    Logger.debug("Previous state #{inspect state}, new_state #{inspect new_state}")
 
     schedule_tick()
 
