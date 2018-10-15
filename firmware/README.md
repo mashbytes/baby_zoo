@@ -1,4 +1,4 @@
-# BabyZoo
+# Firmware
 
 **TODO: Add description**
 
