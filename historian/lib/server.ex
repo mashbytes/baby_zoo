@@ -6,12 +6,7 @@ defmodule BabyZoo.Historian.Server do
 
   alias BabyZoo.Historian.Impl
 
-  def start_link() do
-    GenServer.start_link(__MODULE__, %{})
-  end
-
   def init(entries) do
-    Logger.debug("Starting #{__MODULE__}")
     {:ok, entries}
   end
 
