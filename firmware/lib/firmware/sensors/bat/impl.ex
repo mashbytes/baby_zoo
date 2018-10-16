@@ -1,9 +1,20 @@
-defmodule BabyZoo.Sensors.Bat.StateMachine do
+defmodule BabyZoo.Sensors.Bat.Impl do
+
+  @state_ttl 5_000
 
   def next_state(current, direction) do
     new_level = level(current.level, direction)
     new_since = since(current.level, new_level, current.since)
     %{current | level: new_level, since: new_since}
+  end
+
+  def state(current) do
+    diff = DateTime.diff(current.since, DateTime.utc_now())
+    if diff > @state_ttl do
+      BabyZoo.Sensor.Reading.new(:ok, current.since)
+    else
+      current
+    end
   end
 
   defp level(_, :rising) do

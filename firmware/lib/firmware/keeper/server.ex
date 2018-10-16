@@ -27,6 +27,10 @@ defmodule BabyZoo.Keeper.Server do
     {:noreply, new_state}
   end
 
+  def handle_call({:get_state}, state) do
+    {:reply, state}
+  end
+
   defp schedule_tick() do
     Process.send_after(self(), :tick, @tick_interval)
   end
