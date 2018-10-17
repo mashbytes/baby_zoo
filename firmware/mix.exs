@@ -51,8 +51,7 @@ defmodule Firmware.MixProject do
     [
       {:nerves_runtime, "~> 0.6"},
       {:nerves_init_gadget, "~> 0.4"},
-      {:gpio_rpi, "~> 0.2.2"},
-      {:historian, path: "../historian"},
+      {:gpio_rpi, "~> 0.2.2"}
     ] ++ system(target)
   end
 
