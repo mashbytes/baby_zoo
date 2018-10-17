@@ -11,26 +11,23 @@ defmodule Firmware.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Firmware.Supervisor]
-    Supervisor.start_link(children(@target), opts)
+    Supervisor.start_link(children(), opts)
   end
 
   defp sensors() do
     [BabyZoo.Sensors.Bat]
   end
 
-  # List all child processes to be supervised
-  def children("host") do
 
+  defp children do
     [
-      # Starts a worker by calling: Firmware.Worker.start_link(arg)
-      {BabyZoo.Keeper, sensors()},
-    ] ++ Enum.map(sensors(), fn s -> {s} end)
+      {BabyZoo.Keeper.Server, sensors()},
+    ] ++ Enum.map(sensors(), fn s -> Module.concat(s, Server) end)
+      ++ children(@target)
   end
 
-  def children(_target) do
-    [
-      # Starts a worker by calling: Firmware.Worker.start_link(arg)
-      # {Firmware.Worker, arg},
-    ]
-  end
+  defp children("host"), do: []
+
+  defp children(_), do: []
+
 end

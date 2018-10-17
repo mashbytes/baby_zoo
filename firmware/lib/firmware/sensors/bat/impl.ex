@@ -17,11 +17,11 @@ defmodule BabyZoo.Sensors.Bat.Impl do
     end
   end
 
-  defp level(_, :rising) do
+  defp level(_, :falling) do
     :ok
   end
 
-  defp level(old_level, :falling) do
+  defp level(old_level, :rising) do
     case old_level do
       :warning  -> :critical
       :critical -> :critical

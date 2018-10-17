@@ -10,6 +10,10 @@ defmodule BabyZoo.Keeper.Server do
 
   alias BabyZoo.Keeper.Impl
 
+  def start_link(sensors) do
+    GenServer.start_link(__MODULE__, sensors, name: __MODULE__)
+  end
+
   def init(sensors) do
     schedule_tick()
     {:ok, %{sensors: sensors, states: %{}}}
