@@ -21,8 +21,8 @@ defmodule Firmware.Application do
 
   defp children do
     [
-      {BabyZoo.Keeper.Server, sensors()},
-    ] ++ Enum.map(sensors(), fn s -> Module.concat(s, Server) end)
+      {BabyZoo.Keeper, sensors()},
+    ] ++ sensors()
       ++ children(@target)
   end
 
