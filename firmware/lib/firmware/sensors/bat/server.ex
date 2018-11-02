@@ -5,6 +5,7 @@ defmodule BabyZoo.Sensors.Bat.Server do
   use GenServer
 
   alias BabyZoo.Sensors.Bat.Impl
+  alias BabyZoo.Sensors.Registry
 
   @input_pin Application.get_env(:zoo, :bat_hardware_input_pin, 4)
 
@@ -23,6 +24,9 @@ defmodule BabyZoo.Sensors.Bat.Server do
   def handle_info({:gpio_interrupt, @input_pin, direction}, state) do
     new_state = Impl.next_state(state, direction)
     Logger.debug("Received interrupt direction #{direction}, prev state #{inspect state} new state #{inspect new_state}")
+    if state != new_state do
+      Registry.publish(new_state)
+    end
     {:noreply, new_state}
   end
 
