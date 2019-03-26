@@ -52,6 +52,8 @@ defmodule Skippy.MixProject do
       {:nerves_system_rpi3a, "~> 1.6", runtime: false, targets: :rpi3a},
       {:nerves_system_bbb, "~> 2.0", runtime: false, targets: :bbb},
       {:nerves_system_x86_64, "~> 1.6", runtime: false, targets: :x86_64},
+
+      {:circuits_gpio, "~> 0.1"},
     ]
   end
 end
