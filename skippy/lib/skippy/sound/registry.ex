@@ -1,9 +1,19 @@
 defmodule Skippy.Sound.Registry do
   
+  require Logger
+
   @name __MODULE__
   @topic __MODULE__
 
-  def start_link(_) do
+  def child_spec(_) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, []}
+    }
+  end
+
+  def start_link() do
+    Logger.info("Starting Registry named [#{@name}]")
     Registry.start_link(
       keys: :duplicate,
       name: @name,
@@ -12,10 +22,12 @@ defmodule Skippy.Sound.Registry do
   end
 
   def subscribe() do
+    Logger.debug("Subscribing to registy registry [#{@name}], topic [#{@topic}]")
     Registry.register(@name, @topic, [])
   end
   
   def dispatch(state) do
+    Logger.debug("Dispatching state [#{state}] to registry named [#{@name}], topic [#{@topic}]")
     Registry.dispatch(@name, @topic, fn entries ->
       for {pid, _} <- entries, do: send(pid, {:broadcast, state})
     end)

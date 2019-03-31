@@ -39,6 +39,8 @@ defmodule Skippy.MixProject do
       {:shoehorn, "~> 0.4"},
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},
+      {:nerves_time, "~> 0.2"},
+      {:circuits_gpio, "~> 0.1"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.6", targets: @all_targets},
@@ -53,7 +55,6 @@ defmodule Skippy.MixProject do
       {:nerves_system_bbb, "~> 2.0", runtime: false, targets: :bbb},
       {:nerves_system_x86_64, "~> 1.6", runtime: false, targets: :x86_64},
 
-      {:circuits_gpio, "~> 0.1"},
     ]
   end
 end

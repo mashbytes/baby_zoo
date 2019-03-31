@@ -17,7 +17,7 @@ defmodule Skippy.Application do
   # List all child processes to be supervised
   def children(:host) do
     [
-      {Skippy.Sound.Server, []},
+      {Skippy.Sound.Sensor, []},
       {Skippy.Sound.Registry, []}
       # Starts a worker by calling: Skippy.Worker.start_link(arg)
       # {Skippy.Worker, arg},
@@ -26,7 +26,7 @@ defmodule Skippy.Application do
 
   def children(_target) do
     [
-      {Skippy.Sound.Server, []},
+      {Skippy.Sound.Sensor, []},
       {Skippy.Sound.Registry, []}
       # Starts a worker by calling: Skippy.Worker.start_link(arg)
       # {Skippy.Worker, arg},
