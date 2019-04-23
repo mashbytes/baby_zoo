@@ -18,7 +18,7 @@ defmodule Skippy.Application do
   def children(:host) do
     [
       {Skippy.Sound.Sensor, []},
-      {Skippy.Sound.Registry, []}
+      {Skippy.Sound.Registry, []},
       # Starts a worker by calling: Skippy.Worker.start_link(arg)
       # {Skippy.Worker, arg},
     ]
@@ -27,7 +27,7 @@ defmodule Skippy.Application do
   def children(_target) do
     [
       {Skippy.Sound.Sensor, []},
-      {Skippy.Sound.Registry, []}
+      {Skippy.Sound.Registry, []},
       # Starts a worker by calling: Skippy.Worker.start_link(arg)
       # {Skippy.Worker, arg},
     ]

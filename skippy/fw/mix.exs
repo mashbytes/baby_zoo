@@ -41,6 +41,7 @@ defmodule Skippy.MixProject do
       {:toolshed, "~> 0.2"},
       {:nerves_time, "~> 0.2"},
       {:circuits_gpio, "~> 0.1"},
+      {:picam_http, path: "../picam_http"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.6", targets: @all_targets},
