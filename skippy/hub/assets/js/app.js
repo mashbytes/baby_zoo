@@ -16,36 +16,41 @@ import "phoenix_html"
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
 
-import {Socket, Presence} from "phoenix"
+import LiveSocket from "phoenix_live_view"
 
-let socket = new Socket("/socket", {params: {user_id: window.userId}})
+let liveSocket = new LiveSocket("/live", {params: {user_id: window.userId}})
+liveSocket.connect()
 
-socket.connect()
+// import {Socket, Presence} from "phoenix"
 
-let userList = document.getElementById("user-list")
-let room = socket.channel("rooms:lobby", {})
-let presences = {}
+// let socket = new Socket("/socket", {params: {user_id: window.userId}})
 
-let listBy = (id, {metas: [first, ...rest]}) => {
-  first.name = id
-  first.count = rest.length + 1
-  return first
-}
+// socket.connect()
 
-let render = (presences) => {
-  userList.innerHTML = Presence.list(presences, listBy)
-    .map(user => `<li>${user.name} (${user.count})</li>`)
-    .join("")
-}
+// let userList = document.getElementById("user-list")
+// let room = socket.channel("rooms:lobby", {})
+// let presences = {}
 
-room.on("presence_state", state => {
-  presences = Presence.syncState(presences, state)
-  render(presences)
-})
+// let listBy = (id, {metas: [first, ...rest]}) => {
+//   first.name = id
+//   first.count = rest.length + 1
+//   return first
+// }
 
-room.on("presence_diff", diff => {
-  presences = Presence.syncDiff(presences, diff)
-  render(presences)
-})
+// let render = (presences) => {
+//   userList.innerHTML = Presence.list(presences, listBy)
+//     .map(user => `<li>${user.name} (${user.count})</li>`)
+//     .join("")
+// }
 
-room.join()
+// room.on("presence_state", state => {
+//   presences = Presence.syncState(presences, state)
+//   render(presences)
+// })
+
+// room.on("presence_diff", diff => {
+//   presences = Presence.syncDiff(presences, diff)
+//   render(presences)
+// })
+
+// room.join()

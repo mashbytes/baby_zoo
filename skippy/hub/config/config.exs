@@ -12,7 +12,10 @@ config :hub, HubWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "LlyeScelghjY9QO1AVKgDj15EsqaeUfGUj3Y4wMOLWwtd4k3aTJ2uVK0sv96HPVg",
   render_errors: [view: HubWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Hub.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Hub.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [
+     signing_salt: "bKi1D8nXXRFNMmXs1q7nMs38H9xyreB+"
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

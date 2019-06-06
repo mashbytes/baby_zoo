@@ -3,6 +3,7 @@ defmodule Hub.RoomChannel do
   alias HubWeb.Presence
   
   def join("rooms:lobby", _, socket) do
+    IO.puts("joined")
     send self(), :after_join
     {:ok, socket}
   end
@@ -12,9 +13,11 @@ defmodule Hub.RoomChannel do
       device: "browser",
       online_at: inspect(:os.timestamp())
     })
-    push socket, "presence_state", Presence.list(socket)
+    # push socket, "presence_state", Presence.list(socket)
+    # IO.puts(inspect Presence.list(socket))
     {:noreply, socket}
   end
+
 
 
 

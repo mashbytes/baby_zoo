@@ -24,6 +24,8 @@ defmodule HubWeb do
       import Plug.Conn
       import HubWeb.Gettext
       alias HubWeb.Router.Helpers, as: Routes
+
+      import Phoenix.LiveView.Controller, only: [live_render: 3]
     end
   end
 
@@ -42,6 +44,8 @@ defmodule HubWeb do
       import HubWeb.ErrorHelpers
       import HubWeb.Gettext
       alias HubWeb.Router.Helpers, as: Routes
+
+      import Phoenix.LiveView, only: [live_render: 2, live_render: 3]
     end
   end
 
@@ -50,6 +54,8 @@ defmodule HubWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+
+      import Phoenix.LiveView.Router
     end
   end
 
@@ -59,6 +65,7 @@ defmodule HubWeb do
       import HubWeb.Gettext
     end
   end
+
 
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
