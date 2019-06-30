@@ -10,7 +10,7 @@ defmodule Hub.Application do
     children = [
       # Start the endpoint when the application starts
       HubWeb.Endpoint,
-      HubWeb.Presence
+      HubWeb.Presence,
       # Starts a worker by calling: Hub.Worker.start_link(arg)
       # {Hub.Worker, arg},
     ]
