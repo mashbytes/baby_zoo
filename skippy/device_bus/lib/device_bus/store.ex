@@ -7,6 +7,7 @@ defmodule DeviceBus.Store do
   @server __MODULE__
 
   def start_link(_) do
+    Logger.info("Starting Store named [#{@server}]")
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
