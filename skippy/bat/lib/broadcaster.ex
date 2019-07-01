@@ -20,10 +20,10 @@ defmodule Bat.Broadcaster do
   end
 
   defp schedule_initial_job() do
-    Process.send_after(self(), :tick, 5_000) # In 5 seconds
+    Process.send_after(self(), :tick, 1_000) # In 5 seconds
   end
 
   defp schedule_next_job() do
-    Process.send_after(self(), :tick, 0) # In 60 seconds
+    Process.send_after(self(), :tick, 1_000) # In 60 seconds
   end
 end
