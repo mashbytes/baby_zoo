@@ -32,7 +32,8 @@ defmodule Hub.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:jason, "~> 1.0"},
+      {:poison, "~> 4.0"},
+      # {:jason, "~> 1.1.2"},
       {:phoenix, "~> 1.4.8"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_html, "~> 2.11"},

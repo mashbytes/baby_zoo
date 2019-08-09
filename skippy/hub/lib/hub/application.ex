@@ -6,11 +6,16 @@ defmodule Hub.Application do
   use Application
 
   def start(_type, _args) do
+    import Supervisor.Spec
+
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      HubWeb.Endpoint,
-      HubWeb.Presence,
+      supervisor(HubWeb.Endpoint, []),
+      HubWeb.Presence
+      
+
+      # HubWeb.Listener,
       # Starts a worker by calling: Hub.Worker.start_link(arg)
       # {Hub.Worker, arg},
     ]

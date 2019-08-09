@@ -69,6 +69,5 @@ defmodule HubWeb.Presence do
   original presence data.
   """
   use Phoenix.Presence, otp_app: :hub,
-                        pubsub_server: Hub.PubSub,
-                        log_level: :debug
+                        pubsub_server: HubWeb.PubSub
 end

@@ -20,16 +20,17 @@ defmodule Bat.Sensor do
   end
 
   def handle_info({:circuits_gpio, @input_pin, timestamp, 1}, state) do
-    Logger.debug("Received high signal on #{@input_pin}, timestamp, #{timestamp}")
-    state = %{state | state: Device.State.new(:active, timestamp)}
-    {:noreply, state, @timeout}
+    # Logger.debug("Received high signal on #{@input_pin}, timestamp, #{timestamp}")
+    active = Device.State.new(:active, timestamp)
+    updated_state = %{state | state: active}
+    {:noreply, updated_state, @timeout}
   end
 
   def handle_info(:timeout, state) do
-    timeout_state = Device.State.new(:inactive, DateTime.utc_now())
-    Logger.debug("Timeout occurred, setting state to [#{timeout_state}]")
-    state = %{state | state: timeout_state}
-    {:noreply, state}    
+    inactive_state = Device.State.new(:inactive, DateTime.utc_now())
+    Logger.debug("Timeout occurred, setting state to [#{inactive_state}]")
+    updated_state = %{state | state: inactive_state}
+    {:noreply, updated_state}    
   end
 
   def handle_call(:snapshot, _, state) do

@@ -22,7 +22,7 @@ defmodule HubWeb.HubsView do
   end
 
   def mount(%{params: %{"name" => name}}, socket) do
-    Phoenix.PubSub.subscribe(Hub.PubSub, "users")
+    Phoenix.PubSub.subscribe(HubWeb.PubSub, "users")
     Presence.track(self(), "users", name, %{})
     {:ok, fetch(socket)}
   end

@@ -6,17 +6,17 @@ defmodule Bat.Application do
   use Application
 
   def start(_type, _args) do
-    # List all child processes to be supervised
+    import Supervisor.Spec
+
     children = [
+      Device.Publisher,
       Bat.Sensor,
-      Bat.Broadcaster
-      # Starts a worker by calling: DeviceBus.Worker.start_link(arg)
-      # {DeviceBus.Worker, arg}
+      Bat.Ticker,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Bat.Supervisor]
+    opts = [strategy: :one_for_one, name: Bat.Supervisor, max_restarts: 100]
     Supervisor.start_link(children, opts)
   end
 end

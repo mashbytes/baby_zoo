@@ -12,7 +12,7 @@ config :hub, HubWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "LlyeScelghjY9QO1AVKgDj15EsqaeUfGUj3Y4wMOLWwtd4k3aTJ2uVK0sv96HPVg",
   render_errors: [view: HubWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Hub.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub: [name: HubWeb.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [
      signing_salt: "bKi1D8nXXRFNMmXs1q7nMs38H9xyreB+"
   ]
@@ -23,7 +23,7 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
+# config :phoenix, :json_library, Jason
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

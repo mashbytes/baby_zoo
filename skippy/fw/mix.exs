@@ -41,9 +41,10 @@ defmodule Skippy.MixProject do
       {:toolshed, "~> 0.2"},
       {:nerves_time, "~> 0.2"},
 
-      {:hub, path: "../hub"},
-      {:device_bus, path: "../device_bus", override: true},
-      {:eagle, path: "../eagle"},
+      {:jason, "~> 1.1.2"},
+      {:device, path: "../device", override: true},
+      {:dashboard, path: "../dashboard"},
+      # {:eagle, path: "../eagle"},
       {:bat, path: "../bat"},
 
       # Dependencies for all targets except :host

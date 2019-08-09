@@ -18,7 +18,4 @@ defmodule Hub.RoomChannel do
     {:noreply, socket}
   end
 
-
-
-
 end

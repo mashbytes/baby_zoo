@@ -23,7 +23,7 @@ defmodule Bat.MixProject do
   defp deps do
     [
       {:circuits_gpio, "~> 0.1"},
-      {:device_bus, path: "../device_bus", app: false},
+      {:device, path: "../device", runtime: false},
     ]
   end
 end

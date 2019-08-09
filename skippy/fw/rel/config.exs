@@ -27,7 +27,7 @@ end
 
 release :skippy do
   set(version: current_version(:skippy))
-  set(strip_debug_info: true)
+  set(strip_debug_info: false)
   plugin(Nerves)
   plugin(Shoehorn)
 end
